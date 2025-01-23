@@ -9,7 +9,7 @@ import cors from "cors";
 import multer from "multer";
 import path from "path";
 import corsMiddleware from "./middlewares/cors.js";
-
+import helmet from "helmet";
 import { fileURLToPath } from "url";
 
 const app = express();
@@ -23,6 +23,19 @@ const __dirname = path.dirname(__filename);
 
 // Serve static files from the "uploads" directory
 app.use("/uploads", express.static(path.join(__dirname, "")));
+
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      },
+    },
+  })
+);
 
 //middlewares
 app.use(express.json());
